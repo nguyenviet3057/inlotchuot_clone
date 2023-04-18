@@ -287,6 +287,25 @@
       border-radius: 30px;
       box-shadow: inset 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
     }
+
+    .mobile-func {
+      display: none;
+    }
+    @media only screen and (max-width: 1400px) {
+      .resize-icon {
+        display: none !important;
+      }
+      .mobile-func {
+        display: flex;
+      }
+      #display-image-modal {
+        z-index: -99;
+      }
+      /* .mobile-func input {
+        touch-action: "none"
+      } */
+    }
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
@@ -697,6 +716,10 @@
             style="width: 604px; height: 604px; user-select: none; max-width: 100% !important;">
             <div id="stage-child" class="position-relative"
               style="width: 100%; height: 100%; top: 50%; transform: translateY(-50%);">
+              <!-- <div class="col-4 d-flex flex-column justify-content-center align-items-center position-absolute w-100 h-100" style="z-index: 99; top: 0px; right: -10px; overflow: hidden;">
+                <label class="text-center" for="scale-range" style="text-shadow: -0.4px -0.4px 0 #fff, 0.4px -0.4px 0 #fff, -0.4px 0.4px 0 #fff, 0.4px 0.4px 0 #fff;">Dọc:</label>
+                <input style="transform: rotate(90deg); height: 180px; width: 180px; background: none;" type="range" min="-200" max="200" step="1" value="0" id="y-range">
+              </div> -->
               <div id="image-container" class="m-0 w-100 h-100">
 
                 <img draggable="false" id="display-image"
@@ -721,6 +744,64 @@
             <i class="resize-icon position-absolute fas fa-angle-down" onmousedown="handleResize(1)"
               style="font-size:50px; transform: rotate(315deg); bottom: 0px; right: 0px; cursor: se-resize;"></i>
           </div>
+          <div class="mobile-func row mt-4 mb-2 mx-4" style="z-index: 99;">
+            <div class="my-1">
+              <label class="m-0" for="scale-range">Scale:</label>
+              <div class="row">
+                <label class="col-2 text-end m-0">Nhỏ</label>
+                <input type="range" style="width: 66.67% !important;" min="0.1" max="2" step="0.1" value="1" id="scale-range">
+                <label class="col-2 m-0">To</label>
+              </div>
+            </div>
+            <div class="my-1">
+              <label class="m-0" for="x-range">Ngang:</label>
+              <div class="row align-items-center">
+                <label class="col-2 text-end m-0">Trái</label>
+                <input type="range" style="width: 66.67% !important;" min="-200" max="200" step="1" value="0" id="x-range">
+                <label class="col-2 m-0">Phải</label>
+              </div>
+            </div>
+            <div class="my-1">
+              <label class="m-0" for="y-range">Dọc:</label>
+              <div class="row">
+                <label class="col-2 text-end m-0">Lên</label>
+                <input class="col-6" style="width: 66.67% !important;" type="range" min="-200" max="200" step="1" value="0" id="y-range">
+                <label class="col-2 m-0">Xuống</label>
+              </div>
+            </div>
+          </div>
+          <script>
+            var regex = /[+-]?\d+(\.\d+)?/g;
+            $('#display-image').css({"top":"0px !important"});
+            $('#y-range').on('change touchmove', function() {
+              let new_y = parseInt($(this).val());
+              let transform = $('#display-image').css('transform').match(regex).map(Number);
+              // console.log(transform)
+              let old_x = transform[4];
+              let old_scale = transform[3];
+              $('#display-image').css({"transform":"matrix(" + old_scale + ",0,0," + old_scale+"," + old_x + "," + new_y + ")"});
+              $('#image-modal').css({"transform":"matrix(" + old_scale + ",0,0," + old_scale+"," + old_x + "," + new_y + ")"});
+            })
+            $('#x-range').on('change touchmove', function() {
+              let new_x = parseInt($(this).val());
+              let transform = $('#display-image').css('transform').match(regex).map(Number);
+              // console.log(transform)
+              let old_y = transform[5];
+              let old_scale = transform[3];
+              $('#display-image').css({"transform":"matrix(" + old_scale + ",0,0," + old_scale+"," + new_x + "," + old_y + ")"});
+              $('#image-modal').css({"transform":"matrix(" + old_scale + ",0,0," + old_scale+"," + new_x + "," + old_y + ")"});
+            })
+            $('#scale-range').on('change touchmove', function() {
+              let new_scale = parseFloat($(this).val());
+              console.log(new_scale)
+              let transform = $('#display-image').css('transform').match(regex).map(Number);
+              // console.log(transform)
+              let old_y = transform[5];
+              let old_x = transform[4];
+              $('#display-image').css({"transform":"matrix(" + new_scale + ",0,0," + new_scale+"," + old_x + "," + old_y + ")"});
+              $('#image-modal').css({"transform":"matrix(" + new_scale + ",0,0," + new_scale+"," + old_x + "," + old_y + ")"});
+            })
+          </script>
           <h2 style="text-align: center; margin-top: 20px;">Kéo 4 mũi tên để phóng to, thu nhỏ ảnh. Bấm vào giữa ảnh để
             di chuyển ảnh.</h2>
         </div>
@@ -2288,6 +2369,18 @@
 
         myModal.style.left = (myDiv.width > myDiv.height) ? -(myDiv.width - frame_width) / 2 + "px" : "0px";
         myModal.style.top = (myDiv.width > myDiv.height) ? "0px" : -(myDiv.height - frame_height) / 2 + "px";
+        
+        // console.log($(window).width(), $(window).height())
+        if ($(window).width() < $(window).height() && $(window).width() <= 1400) {
+          console.log("mobile")
+          // myDiv.style.top = "0px";
+          let frame_height = document.getElementById("stage-child").offsetHeight - 4;
+          let oldY = parseInt(myModal.style.top)
+          frame_height = document.getElementById("image-container").offsetHeight;
+          myDiv.style.top = (oldY - ($(".stage-container").eq(0).height() - frame_height) / 2) + "px";
+          myModal.style.top = "0px";
+        // GIT PUSH
+        }
       }
     };
 
