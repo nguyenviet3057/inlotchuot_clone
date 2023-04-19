@@ -304,6 +304,33 @@
       /* .mobile-func input {
         touch-action: "none"
       } */
+      .range-values datalist{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        writing-mode: vertical-lr;
+      }
+      
+      .range-values option {
+        padding: 0;
+        text-align: center;
+        font-size: larger;
+        min-width: 5px;
+      }
+
+      .range-values option:first-child, .range-values option:last-child {
+        writing-mode: horizontal-tb;
+        font-size: x-small;
+      }
+      div.container div.col-md-6.col-lg-7.col-xl-6.p-0 {
+        overflow: hidden;
+      }
+      div.container div.col-md-6.col-lg-7.col-xl-6.p-0 h2 {
+        display: none;
+      }
+      div.mobile-func > div > div label {
+        font-weight: lighter;
+      }
     }
 
   </style>
@@ -745,28 +772,79 @@
               style="font-size:50px; transform: rotate(315deg); bottom: 0px; right: 0px; cursor: se-resize;"></i>
           </div>
           <div class="mobile-func row mt-4 mb-2 mx-4" style="z-index: 99;">
-            <div class="my-1">
+            <div class="mb-2 d-flex flex-column p-0">
               <label class="m-0" for="scale-range">Scale:</label>
-              <div class="row">
+              <div class="row align-items-center" style="margin-top: -10px;">
                 <label class="col-2 text-end m-0">Nhỏ</label>
-                <input type="range" style="width: 66.67% !important;" min="0.1" max="2" step="0.1" value="1" id="scale-range">
+                <input type="range" class="p-0" list="scale-values" style="width: 66.67% !important;" min="0.1" max="2.1" step="0.2" value="1" id="scale-range">
                 <label class="col-2 m-0">To</label>
               </div>
-            </div>
-            <div class="my-1">
-              <label class="m-0" for="x-range">Ngang:</label>
-              <div class="row align-items-center">
-                <label class="col-2 text-end m-0">Trái</label>
-                <input type="range" style="width: 66.67% !important;" min="-200" max="200" step="1" value="0" id="x-range">
-                <label class="col-2 m-0">Phải</label>
+              <div class="range-values row justify-content-center" style="margin-top: -12px;">
+                <small for="scale-values" class="col-2 d-flex align-items-end justify-content-end">lần</small>
+                <datalist id="scale-values" class="p-0 col-8">
+                  <option label="0.1"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="1" style="writing-mode: horizontal-tb; font-size: x-small;"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="2.1"></option>
+                </datalist>
+                <div class="col-2"></div>
               </div>
             </div>
-            <div class="my-1">
+            <div class="mb-2 d-flex flex-column p-0">
+              <label class="m-0" for="x-range">Ngang:</label>
+              <div class="row align-items-center" style="margin-top: -10px;">
+                <label class="col-2 text-end m-0">Trái</label>
+                <input type="range" class="p-0" list="x-values" style="width: 66.67% !important;" min="-200" max="200" step="1" value="0" id="x-range">
+                <label class="col-2 m-0">Phải</label>
+              </div>
+              <div class="range-values row justify-content-center" style="margin-top: -12px;">
+                <small for="x-values" class="col-2 d-flex align-items-end justify-content-end">px</small>
+                <datalist id="x-values" class="p-0 col-8">
+                  <option label="-200"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="0" style="writing-mode: horizontal-tb; font-size: x-small;"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="200"></option>
+                </datalist>
+                <div class="col-2"></div>
+              </div>
+            </div>
+            <div class="mb-2 d-flex flex-column p-0">
               <label class="m-0" for="y-range">Dọc:</label>
-              <div class="row">
+              <div class="row align-items-center" style="margin-top: -10px;">
                 <label class="col-2 text-end m-0">Lên</label>
-                <input class="col-6" style="width: 66.67% !important;" type="range" min="-200" max="200" step="1" value="0" id="y-range">
+                <input class="p-0" list="y-values" style="width: 66.67% !important;" type="range" min="-200" max="200" step="1" value="0" id="y-range">
                 <label class="col-2 m-0">Xuống</label>
+              </div>
+              <div class="range-values row justify-content-center" style="margin-top: -12px;">
+                <small for="y-values" class="col-2 d-flex align-items-end justify-content-end">px</small>
+                <datalist id="y-values" class="p-0 col-8">
+                  <option label="-200"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="0" style="writing-mode: horizontal-tb; font-size: x-small;"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="-"></option>
+                  <option label="200"></option>
+                </datalist>
+                <div class="col-2"></div>
               </div>
             </div>
           </div>
@@ -793,7 +871,6 @@
             })
             $('#scale-range').on('change touchmove', function() {
               let new_scale = parseFloat($(this).val());
-              console.log(new_scale)
               let transform = $('#display-image').css('transform').match(regex).map(Number);
               // console.log(transform)
               let old_y = transform[5];
